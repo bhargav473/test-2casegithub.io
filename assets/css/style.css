@@ -1946,6 +1946,16 @@ p {
     width: 100%;
   }
 }
+
+@media only screen and (min-width: 1200px) and (max) {
+  .hero__thumb-2 img.hero-big {
+    width: 100%;
+  }
+}
+
+
+
+
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .hero__thumb-2 img.hero-big {
     width: 100%;
@@ -2124,8 +2134,8 @@ p {
 }
 .hero__promotion {
   position: absolute !important;
-  left: -7% !important;
-  top: 2% !important;
+  left: -14% !important;
+  top: -3% !important;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -2156,7 +2166,7 @@ p {
 .hero__promotion.education {
   bottom: 10% !important;
   top: auto !important;
-  left: 6% !important;
+  left: -2% !important;
 }
 .hero__promotion-icon span {
   display: inline-block;
