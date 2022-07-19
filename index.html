@@ -69,6 +69,59 @@
          
               
       </script>
+
+
+      <script>
+         function fetchAPICall(url, config){
+            return fetch(url, config).then(r => r.json()).catch(e => console.log(e))
+         }
+
+         // contact-form
+         function sendMail() {
+         
+            if(!document.querySelector('#contact-form #checkbox').checked)
+               {
+                  alert('Please agree to terms and conditions');
+                  return false;
+               }
+
+            const tokenURL = "http://3.110.162.90:8080/Token";
+            const tokenURLConfig = {
+               method : "POST"
+            };
+            const headers = new Headers();
+            headers.append('Accept', 'application/json'); // This one is enough for GET requests
+            headers.append('Content-Type', 'application/json'); // This one sends body
+                  
+            fetchAPICall(tokenURL, tokenURLConfig)
+            .then(r => {
+               console.log(r.Token);
+               if(r.Token)
+               {
+                  headers.append('Authorization',  'Bearer '+r.Token); // Set bearer
+                  fetchAPICall('http://3.110.162.90:8080/SendMail', {
+                  method: 'POST',
+                  headers: headers,
+                  body: JSON.stringify({
+                        organisation_name: 'org name',
+                        name : document.querySelector("#contact-form #firstname").value || 'bhargav',
+                        mobile_number : document.querySelector("#contact-form #phone").value,
+                        email : document.querySelector("#contact-form #email").value,
+                        description : document.querySelector("#contact-form #message").value
+                     })
+                  })
+                  .then(res => {
+                     alert(' Your message was sent successfully ');
+                     window.location.reload();
+                     console.log(res)
+                  })
+               }
+            })
+            return false;       
+         }
+      </script>
+
+
    </head>
    <body>
       <!-- Preloader Start -->
@@ -1147,34 +1200,44 @@
                               <h5 class="text-blue text-center wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Send Message</h5>
                               <h2 class="section-title mt-15 mb-10 text-center wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Drop Us a Line</h2>
                               <p class="text-muted mb-30 font-md text-center wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Your email address will not be published. Required fields are marked *</p>
-                              <form class="contact-form-style mt-80" id="contact-form" action="#" method="post">
+                              <form class="contact-form-style mt-80" id="contact-form" onsubmit="return sendMail()">
                                  <div class="row wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
                                     <div class="col-lg-6 col-md-6">
                                        <div class="input-style mb-20">
-                                          <input name="name" placeholder="First Name" type="text" />
+                                          <input name="name" id="firstname" placeholder="First Name" type="text" />
                                        </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                        <div class="input-style mb-20">
-                                          <input name="email" placeholder="Your Email" type="email" />
+                                          <input name="email" id="email" placeholder="Your Email" type="email" />
                                        </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                        <div class="input-style mb-20">
-                                          <input name="telephone" placeholder="Your Phone" type="tel" />
+                                          <input name="telephone" id="phone" placeholder="Your Phone" type="tel" />
                                        </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                        <div class="input-style mb-20">
-                                          <input name="subject" placeholder="Subject" type="text" />
+                                          <input name="subject" id="subject" placeholder="Subject" type="text" />
                                        </div>
                                     </div>
+                                
+                                    
                                     <div class="col-lg-12 col-md-12 text-center">
                                        <div class="textarea-style mb-30">
-                                          <textarea name="message" placeholder="Message"></textarea>
+                                          <textarea name="message" id="message" placeholder="Message"></textarea>
                                        </div>
+                                         <div class="col-lg-12 col-md-12 d-flex padding-20-row-" >
+                                       <div class=" " >
+                                          <input style="width: 20px!important; height: 20px!important;margin-right: ;4px: ;" name="checkbox" id="checkbox" placeholder="I agree for all" type="checkbox" />
+                                        <span>  I agree to Terms & Conditions</span>
+
+                                       </div>
+                                    </div>
                                        <button class=" submit-auto-width" type="submit">Send message</button>
                                     </div>
+
                                  </div>
                               </form>
                               <p class="form-messege"></p>
